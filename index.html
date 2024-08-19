@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gardel Plugins</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #282c34;
+            color: white;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 50px;
+            font-size: 3rem;
+        }
+
+        .plugin-card {
+            margin: 20px;
+        }
+
+        .plugin-button {
+            padding: 15px 30px;
+            font-size: 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            background-color: #61dafb;
+            color: #282c34;
+            transition: background-color 0.3s ease;
+        }
+
+        .plugin-button:hover {
+            background-color: #21a1f1;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        #video-container {
+            width: 80%;
+            height: 80%;
+        }
+
+        #video-element {
+            border: none;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gardel Plugins</h1>
+        <div class="plugin-card">
+            <button class="plugin-button" onclick="playVideo()">Plugin 1</button>
+        </div>
+        <div class="plugin-card">
+            <button class="plugin-button" onclick="playVideo()">Plugin 2</button>
+        </div>
+        <div id="video-overlay" class="overlay">
+            <div id="video-container">
+                <video id="video-element" width="100%" height="100%" autoplay muted>
+                    <source src="ENLACE_DIRECTO_A_TU_VIDEO/video.mp4" type="video/mp4">
+                    Tu navegador no soporta la etiqueta de video.
+                </video>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function playVideo() {
+            const overlay = document.getElementById('video-overlay');
+            const video = document.getElementById('video-element');
+
+            overlay.style.display = 'flex';
+
+            // Request full screen and maximize volume
+            if (overlay.requestFullscreen) {
+                overlay.requestFullscreen();
+            } else if (overlay.mozRequestFullScreen) { /* Firefox */
+                overlay.mozRequestFullScreen();
+            } else if (overlay.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+                overlay.webkitRequestFullscreen();
+            } else if (overlay.msRequestFullscreen) { /* IE/Edge */
+                overlay.msRequestFullscreen();
+            }
+
+            video.volume = 1; // Max volume
+            video.play();
+
+            // Prevent pause
+            video.addEventListener('pause', function() {
+                video.play();
+            });
+        }
+    </script>
+</body>
+</html>
