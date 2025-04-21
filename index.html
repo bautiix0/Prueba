@@ -1,119 +1,103 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gardel Plugins</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #282c34;
-            color: white;
-            margin: 0;
-        }
-
-        .container {
-            text-align: center;
-        }
-
-        h1 {
-            margin-bottom: 50px;
-            font-size: 3rem;
-        }
-
-        .plugin-card {
-            margin: 20px;
-        }
-
-        .plugin-button {
-            padding: 15px 30px;
-            font-size: 1.5rem;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            background-color: #61dafb;
-            color: #282c34;
-            transition: background-color 0.3s ease;
-        }
-
-        .plugin-button:hover {
-            background-color: #21a1f1;
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        #video-container {
-            width: 80%;
-            height: 80%;
-        }
-
-        #video-element {
-            border: none;
-            width: 100%;
-            height: 100%;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Die Deutscshe Hause - Inicio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Arial:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: url('fondo.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh;
+      color: white;
+      font-family: 'Arial', sans-serif;
+      overflow-x: hidden;
+    }
+    .animate-bounce-in {
+      animation: bounce-in 1s ease;
+    }
+    @keyframes bounce-in {
+      0% { transform: scale(0.7); opacity: 0; }
+      60% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+    .hover-scale {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .hover-scale:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.7);
+    }
+    .glow {
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+    }
+    .navbar {
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+    }
+    .card {
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+  </style>
 </head>
-<body>
-    <div class="container">
-        <h1>Gardel Plugins</h1>
-        <div class="plugin-card">
-            <button class="plugin-button" onclick="playVideo()">Plugin 1</button>
-        </div>
-        <div class="plugin-card">
-            <button class="plugin-button" onclick="playVideo()">Plugin 2</button>
-        </div>
-        <div id="video-overlay" class="overlay">
-            <div id="video-container">
-                <video id="video-element" width="100%" height="100%" autoplay muted>
-                    <source src="https://drive.google.com/uc?export=download&id=1kAoUealtGotnGw0Vj59Zr1gRxN0ckxgn" type="video/mp4">
-                    Tu navegador no soporta la etiqueta de video.
-                </video>
-            </div>
-        </div>
+<body class="p-6">
+  <!-- Navbar (fija, sin animación de entrada) -->
+  <nav class="navbar fixed top-0 left-0 w-full p-4 flex justify-between items-center z-10">
+    <div class="flex items-center">
+      <img src="logo.png" alt="Logo de Die Deutscshe Hause" class="h-12 rounded-full glow" onerror="this.src='https://via.placeholder.com/150?text=Logo'">
+      <h1 class="text-2xl font-bold ml-4">Die Deutscshe Hause</h1>
     </div>
+    <div class="flex items-center space-x-4">
+      <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-2xl hover-scale transition-all">
+        Cerrar Sesión
+      </button>
+      <img src="logo2.png" alt="Logo pequeño" class="h-16 animate-bounce-in" onerror="this.src='https://via.placeholder.com/40?text=Logo2'">
+    </div>
+  </nav>
 
-    <script>
-        function playVideo() {
-            const overlay = document.getElementById('video-overlay');
-            const video = document.getElementById('video-element');
+  <!-- Contenido principal -->
+  <div class="container mx-auto max-w-4xl mt-24">
+    <h1 class="text-5xl font-bold text-center mb-12 animate-bounce-in">Bienvenidos a Die Deutscshe Hause</h1>
 
-            overlay.style.display = 'flex';
+    <!-- Menú principal -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <a href="register_activity.html" class="card p-6 rounded-3xl glow animate-bounce-in hover-scale text-center">
+        <h2 class="text-xl font-semibold text-blue-500 mb-2">Registrar Actividad</h2>
+        <p class="text-gray-300">Registra una nueva actividad para tu equipo.</p>
+      </a>
+      <a href="login.html" class="card p-6 rounded-3xl glow animate-bounce-in hover-scale text-center">
+        <h2 class="text-xl font-semibold text-blue-500 mb-2">Registrar Nuevo Usuario</h2>
+        <p class="text-gray-300">Añade un nuevo miembro al grupo.</p>
+      </a>
+      <a href="consult_activities.html" class="card p-6 rounded-3xl glow animate-bounce-in hover-scale text-center">
+        <h2 class="text-xl font-semibold text-blue-500 mb-2">Consultar Actividades</h2>
+        <p class="text-gray-300">Revisa las estadísticas de actividades.</p>
+      </a>
+    </div>
+  </div>
 
-            // Request full screen and maximize volume
-            if (overlay.requestFullscreen) {
-                overlay.requestFullscreen();
-            } else if (overlay.mozRequestFullScreen) { /* Firefox */
-                overlay.mozRequestFullScreen();
-            } else if (overlay.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-                overlay.webkitRequestFullscreen();
-            } else if (overlay.msRequestFullscreen) { /* IE/Edge */
-                overlay.msRequestFullscreen();
-            }
+  <script>
+    // Verificar si el usuario está autenticado al cargar la página
+    window.onload = function() {
+      const isOrgLoggedIn = localStorage.getItem('isOrgLoggedIn') === 'true';
+      if (!isOrgLoggedIn) {
+        window.location.href = 'org_login.html';
+      }
+    };
 
-            video.volume = 1; // Max volume
-            video.play();
-
-            // Prevent pause
-            video.addEventListener('pause', function() {
-                video.play();
-            });
-        }
-    </script>
+    function logout() {
+      localStorage.removeItem('isOrgLoggedIn');
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('isAdminLoggedIn'); // También limpiamos la sesión de administrador
+      alert('Sesión cerrada con éxito.');
+      window.location.href = 'org_login.html';
+    }
+  </script>
 </body>
 </html>
