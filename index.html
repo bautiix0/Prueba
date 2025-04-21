@@ -50,7 +50,7 @@
   <nav class="navbar fixed top-0 left-0 w-full p-4 flex justify-between items-center z-10">
     <div class="flex items-center">
       <img src="logo.png" alt="Logo de Die Deutscshe Hause" class="h-12 rounded-full glow" onerror="this.src='https://via.placeholder.com/150?text=Logo'">
-      <h1 class="text-2xl font-bold ml-4">Die Deutscshe Hause</h1>
+      <h1 class="text-2xl font-bold ml-4">Die Deutscshe Hause 🎮</h1>
     </div>
     <div>
       <img src="logo2.png" alt="Logo pequeño" class="h-16 animate-bounce-in" onerror="this.src='https://via.placeholder.com/40?text=Logo2'">
@@ -63,9 +63,29 @@
         <a href="register_user.html" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-6 rounded-2xl text-center hover-scale">👤 Registrar Jugador</a>
         <a href="register_activity.html" class="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-6 rounded-2xl text-center hover-scale">📋 Registrar Actividad</a>
         <a href="consult_activities.html" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-4 px-6 rounded-2xl text-center hover-scale">📊 Consultar Actividades</a>
-        <a href="login.html" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 px-6 rounded-2xl text-center hover-scale">🔑 Iniciar Sesión</a>
+        <a href="#" onclick="logout()" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 px-6 rounded-2xl text-center hover-scale">🚪 Cerrar Sesión</a>
       </div>
     </div>
   </div>
+  <script>
+    function checkLogin() {
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      if (!isLoggedIn) {
+        alert('Debes iniciar sesión para acceder al menú principal.');
+        window.location.href = 'login.html';
+      }
+    }
+
+    function logout() {
+      if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+        localStorage.setItem('isLoggedIn', 'false');
+        localStorage.setItem('isAdminLoggedIn', 'false');
+        alert('Sesión cerrada con éxito.');
+        window.location.href = 'login.html';
+      }
+    }
+
+    window.onload = checkLogin;
+  </script>
 </body>
 </html>
