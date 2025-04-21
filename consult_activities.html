@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Die Deutscshe Hause - Consultar Actividades</title>
+  <title>Die Deutscshe Hause - Consultar Actividades 📊</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Arial:wght@700&display=swap" rel="stylesheet">
@@ -49,6 +49,38 @@
       max-width: 100px;
       height: auto;
       border-radius: 1rem;
+      cursor: pointer;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 50;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.9);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 1rem;
+    }
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: white;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    table th, table td {
+      white-space: nowrap;
+      padding: 0.5rem 1.5rem;
     }
   </style>
 </head>
@@ -56,43 +88,43 @@
   <nav class="navbar fixed top-0 left-0 w-full p-4 flex justify-between items-center z-10">
     <div class="flex items-center">
       <img src="logo.png" alt="Logo de Die Deutscshe Hause" class="h-12 rounded-full glow" onerror="this.src='https://via.placeholder.com/150?text=Logo'">
-      <h1 class="text-2xl font-bold ml-4">Die Deutscshe Hause</h1>
+      <h1 class="text-2xl font-bold ml-4">Die Deutscshe Hause 🎮</h1>
     </div>
     <div>
       <img src="logo2.png" alt="Logo pequeño" class="h-16 animate-bounce-in" onerror="this.src='https://via.placeholder.com/40?text=Logo2'">
     </div>
   </nav>
-  <div class="container mx-auto max-w-4xl mt-24">
-    <h1 class="text-4xl font-bold text-center mb-8 animate-bounce-in">Consultar Actividades</h1>
+  <div class="container mx-auto max-w-7xl mt-24">
+    <h1 class="text-4xl font-bold text-center mb-8 animate-bounce-in">Consultar Actividades 📊</h1>
     <div class="card p-6 rounded-3xl glow animate-bounce-in mb-8">
-      <h2 class="text-2xl font-semibold mb-4 text-center text-blue-500">Seleccionar Usuario</h2>
-      <div class="mb-4">
-        <label for="userSelect" class="block text-sm font-medium">Usuario</label>
-        <select id="userSelect" onchange="updateActivityList()" class="w-full p-3 mt-1 bg-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
-          <option value="">Selecciona un usuario</option>
-        </select>
+      <h2 class="text-2xl font-semibold mb-4 text-center text-blue-500">Seleccionar Usuario 👤</h2>
+      <div class="mb-4 flex justify-center">
+        <div class="w-full max-w-md">
+          <label for="userSelect" class="block text-sm font-medium">Usuario 👤</label>
+          <select id="userSelect" onchange="updateActivityList()" class="w-full p-3 mt-1 bg-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+            <option value="">Selecciona un usuario</option>
+          </select>
+        </div>
       </div>
     </div>
     <div id="activitiesList" class="card p-6 rounded-3xl glow animate-bounce-in mb-8 hidden">
-      <h2 class="text-2xl font-semibold mb-4 text-center text-blue-500">Actividades del Usuario</h2>
-      <div class="overflow-x-auto">
-        <table id="activitiesTable" class="w-full text-left">
-          <thead>
-            <tr class="bg-gray-700">
-              <th class="p-2">📋 Actividad</th>
-              <th class="p-2">👤 Encontrado por</th>
-              <th class="p-2">👥 Participantes</th>
-              <th class="p-2">📅 Fecha</th>
-              <th class="p-2">📷 Foto</th>
-              <th class="p-2">✏️ Editar</th>
-            </tr>
-          </thead>
-          <tbody id="activitiesTableBody"></tbody>
-        </table>
-      </div>
+      <h2 class="text-2xl font-semibold mb-4 text-center text-blue-500">Actividades del Usuario 📋</h2>
+      <table id="activitiesTable" class="w-full text-left">
+        <thead>
+          <tr class="bg-gray-700">
+            <th class="p-2">📋 Actividad</th>
+            <th class="p-2">👤 Organizador</th>
+            <th class="p-2">👥 Participantes</th>
+            <th class="p-2">📅 Fecha</th>
+            <th class="p-2">📷 Foto</th>
+            <th class="p-2">✏️ Editar</th>
+          </tr>
+        </thead>
+        <tbody id="activitiesTableBody"></tbody>
+      </table>
     </div>
     <div id="editForm" class="card p-6 rounded-3xl glow animate-bounce-in mb-8 hidden">
-      <h2 class="text-2xl font-semibold mb-4 text-center text-blue-500">Editar Actividad</h2>
+      <h2 class="text-2xl font-semibold mb-4 text-center text-blue-500">Editar Actividad ✏️</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label for="editActivityName" class="block text-sm font-medium">📋 Nombre de la Actividad</label>
@@ -109,7 +141,7 @@
           </select>
         </div>
         <div>
-          <label for="editFoundBy" class="block text-sm font-medium">👤 Encontrado por</label>
+          <label for="editFoundBy" class="block text-sm font-medium">👤 Organizador</label>
           <select id="editFoundBy" class="w-full p-3 mt-1 bg-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" onchange="updateEditParticipants()">
             <option value="">Selecciona un usuario</option>
           </select>
@@ -120,7 +152,7 @@
             <select id="editParticipants" multiple class="p-3 mt-1 bg-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
               <option value="" disabled>Selecciona participantes</option>
             </select>
-            <button onclick="addEditParticipants()" class="bg-green-500 hover:bg-green-600 text-white font-bold p-3 rounded-2xl hover-scale">+</button>
+            <button onclick="addEditParticipants()" class="bg-green-500 hover:bg-green-600 text-white font-bold p-3 rounded-2xl hover-scale">➕</button>
           </div>
           <div id="editAddedParticipants" class="mt-2 text-sm text-gray-300"></div>
         </div>
@@ -134,26 +166,31 @@
         </div>
       </div>
       <div class="flex gap-4 mt-4">
-        <button onclick="saveEditedActivity()" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-2xl hover-scale">Guardar Cambios</button>
-        <button onclick="cancelEdit()" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-4 rounded-2xl hover-scale">Cancelar</button>
+        <button onclick="saveEditedActivity()" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-2xl hover-scale">💾 Guardar Cambios</button>
+        <button onclick="deleteActivity()" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-2xl hover-scale">🗑️ Eliminar Actividad</button>
+        <button onclick="cancelEdit()" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-4 rounded-2xl hover-scale">❌ Cancelar</button>
       </div>
     </div>
     <div class="card p-6 rounded-3xl glow animate-bounce-in">
-      <h2 class="text-2xl font-semibold mb-4 text-center text-blue-500">Estadísticas</h2>
+      <h2 class="text-2xl font-semibold mb-4 text-center text-blue-500">Estadísticas 📈</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <h3 class="text-lg font-semibold mb-2">📊 Participación</h3>
+          <h3 class="text-lg font-semibold mb-2 text-center">📊 Participación</h3>
           <canvas id="participationChart" class="w-full"></canvas>
         </div>
         <div>
-          <h3 class="text-lg font-semibold mb-2">📈 Actividades Más Frecuentes</h3>
+          <h3 class="text-lg font-semibold mb-2 text-center">📈 Actividades Más Frecuentes</h3>
           <canvas id="activityFrequencyChart" class="w-full"></canvas>
         </div>
       </div>
     </div>
     <div class="mt-6 text-center">
-      <a href="index.html" class="inline-block bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-2xl hover-scale">Volver al Menú</a>
+      <a href="index.html" class="inline-block bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-2xl hover-scale">🏠 Volver al Menú</a>
     </div>
+  </div>
+  <div id="imageModal" class="modal">
+    <span class="close" onclick="closeModal()">×</span>
+    <img class="modal-content" id="modalImage">
   </div>
   <script>
     let activities = JSON.parse(localStorage.getItem('activities')) || [];
@@ -192,7 +229,7 @@
         activitiesList.classList.remove('hidden');
       }
       userActivities.forEach((activity, index) => {
-        const role = activity.foundBy === user ? 'Encontrado por' : 'Participante';
+        const role = activity.foundBy === user ? 'Organizador' : 'Participante';
         const imageSrc = activity.imageData || 'https://via.placeholder.com/100?text=Sin+Foto';
         const row = document.createElement('tr');
         row.innerHTML = `
@@ -200,7 +237,7 @@
           <td class="p-2 border-t border-gray-600">${activity.foundBy}</td>
           <td class="p-2 border-t border-gray-600">${activity.participants.join(', ')}</td>
           <td class="p-2 border-t border-gray-600">${activity.date}</td>
-          <td class="p-2 border-t border-gray-600"><img src="${imageSrc}" alt="Foto de ítems" class="activity-image"></td>
+          <td class="p-2 border-t border-gray-600"><img src="${imageSrc}" alt="Foto de ítems" class="activity-image" onclick="openModal('${imageSrc}')"></td>
           <td class="p-2 border-t border-gray-600">
             <button onclick="editActivity(${index})" class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-1 px-2 rounded-2xl hover-scale">✏️</button>
           </td>
@@ -212,50 +249,66 @@
     function updateCharts(userActivities, user) {
       const foundByCount = userActivities.filter(a => a.foundBy === user).length;
       const participantCount = userActivities.filter(a => a.participants.includes(user)).length;
+      const totalParticipation = foundByCount + participantCount;
       const activityCounts = {};
       userActivities.forEach(a => {
         activityCounts[a.activityName] = (activityCounts[a.activityName] || 0) + 1;
       });
+      const totalActivities = Object.values(activityCounts).reduce((sum, count) => sum + count, 0);
       const ctx1 = document.getElementById('participationChart').getContext('2d');
       if (participationChart) participationChart.destroy();
       participationChart = new Chart(ctx1, {
-        type: 'bar',
+        type: 'pie',
         data: {
-          labels: ['Encontrado por', 'Participante'],
+          labels: ['Organizador', 'Participante'],
           datasets: [{
-            label: 'Participaciones',
+            label: 'Participaciones 📊',
             data: [foundByCount, participantCount],
             backgroundColor: ['#3b82f6', '#60a5fa'],
             borderWidth: 1
           }]
         },
         options: {
-          scales: {
-            y: { beginAtZero: true, ticks: { color: 'white' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
-            x: { ticks: { color: 'white' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } }
-          },
-          plugins: { legend: { labels: { color: 'white' } } }
+          plugins: {
+            legend: { labels: { color: 'white' } },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  const value = context.raw;
+                  const percentage = totalParticipation > 0 ? Math.round((value / totalParticipation) * 100) : 0;
+                  return `${context.label}: ${percentage}%`;
+                }
+              }
+            }
+          }
         }
       });
       const ctx2 = document.getElementById('activityFrequencyChart').getContext('2d');
       if (activityFrequencyChart) activityFrequencyChart.destroy();
       activityFrequencyChart = new Chart(ctx2, {
-        type: 'bar',
+        type: 'pie',
         data: {
           labels: Object.keys(activityCounts),
           datasets: [{
-            label: 'Frecuencia',
+            label: 'Frecuencia 📈',
             data: Object.values(activityCounts),
-            backgroundColor: '#3b82f6',
+            backgroundColor: ['#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe'],
             borderWidth: 1
           }]
         },
         options: {
-          scales: {
-            y: { beginAtZero: true, ticks: { color: 'white' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
-            x: { ticks: { color: 'white' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } }
-          },
-          plugins: { legend: { labels: { color: 'white' } } }
+          plugins: {
+            legend: { labels: { color: 'white' } },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  const value = context.raw;
+                  const percentage = totalActivities > 0 ? Math.round((value / totalActivities) * 100) : 0;
+                  return `${context.label}: ${percentage}%`;
+                }
+              }
+            }
+          }
         }
       });
     }
@@ -326,6 +379,15 @@
         saveActivity(activities[editingIndex].imageData);
       }
     }
+    function deleteActivity() {
+      if (confirm('¿Estás seguro de que deseas eliminar esta actividad?')) {
+        activities.splice(editingIndex, 1);
+        localStorage.setItem('activities', JSON.stringify(activities));
+        alert('Actividad eliminada con éxito.');
+        cancelEdit();
+        updateActivityList();
+      }
+    }
     function cancelEdit() {
       document.getElementById('editForm').classList.add('hidden');
       document.getElementById('activitiesList').classList.remove('hidden');
@@ -335,6 +397,16 @@
       document.getElementById('editItemsImage').value = '';
       selectedParticipants = [];
       document.getElementById('editAddedParticipants').textContent = '';
+    }
+    function openModal(imageSrc) {
+      const modal = document.getElementById('imageModal');
+      const modalImage = document.getElementById('modalImage');
+      modalImage.src = imageSrc;
+      modal.style.display = 'flex';
+    }
+    function closeModal() {
+      const modal = document.getElementById('imageModal');
+      modal.style.display = 'none';
     }
     window.onload = loadUsers;
   </script>
