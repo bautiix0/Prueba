@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Die Deutscshe Hause - Registrar Actividad</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Arial:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: url('fondo.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh;
+      color: white;
+      font-family: 'Arial', sans-serif;
+      overflow-x: hidden;
+    }
+    .animate-bounce-in {
+      animation: bounce-in 1s ease;
+    }
+    @keyframes bounce-in {
+      0% { transform: scale(0.7); opacity: 0; }
+      60% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+    .hover-scale {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .hover-scale:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.7);
+    }
+    .glow {
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+    }
+    .navbar {
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+    }
+    .card {
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+    .select-container {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .select-container select {
+      flex-grow: 1;
+    }
+  </style>
+</head>
+<body class="p-6">
+  <!-- Navbar (fija, sin animación de entrada) -->
+  <nav class="navbar fixed top-0 left-0 w-full p-4 flex justify-between items-center z-10">
+    <div class="flex items-center">
+      <img src="logo.png" alt="Logo de Die Deutscshe Hause" class="h-12 rounded-full glow" onerror="this.src='https://via.placeholder.com/150?text=Logo'">
+      <h1 class="text-2xl font-bold ml-4">Die Deutscshe Hause</h1>
+    </div>
+    <div>
+      <img src="logo2.png" alt="Logo pequeño" class="h-16 animate-bounce-in" onerror="this.src='https://via.placeholder.com/40?text=Logo2'">
+    </div>
+  </nav>
+
+  <!-- Contenido principal -->
+  <div class="container mx-auto max-w-4xl mt-24">
+    <h1 class="text-4xl font-bold text-center mb-8 animate-bounce-in">Registrar Nueva Actividad</h1>
+
+    <!-- Formulario para registrar actividades -->
+    <div class="card p-6 rounded-3xl glow animate-bounce-in">
+      <h2 class="text-2xl font-semibold mb-4 text-center text-blue-500">Formulario de Registro</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label for="activityName" class="block text-sm font-medium">Nombre de la Actividad</label>
+          <select id="activityName" class="w-full p-3 mt-1 bg-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+            <option value="">Selecciona una actividad</option>
+            <option value="Misión de tráfico ilegal">Misión de tráfico ilegal</option>
+            <option value="Robo a negocio">Robo a negocio</option>
+            <option value="Lancha encallada">Lancha encallada</option>
+            <option value="Elaboración de metanfetamina">Elaboración de metanfetamina</option>
+            <option value="Búsqueda de contenedores">Búsqueda de contenedores</option>
+            <option value="Barriles a la deriva">Barriles a la deriva</option>
+            <option value="Tráfico aéreo avanzado">Tráfico aéreo avanzado</option>
+            <option value="Misión de tráfico avanzado">Misión de tráfico avanzado</option>
+          </select>
+        </div>
+        <div>
+          <label for="foundBy" class="block text-sm font-medium">Encontrado por</label>
+          <select id="foundBy" class="w-full p-3 mt-1 bg-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" onchange="updateParticipants()">
+            <option value="">Selecciona un usuario</option>
+          </select>
+        </div>
+        <div>
+          <label for="participants" class="block text-sm font-medium">Participantes</label>
+          <div class="select-container">
+            <select id="participants" multiple class="p-3 mt-1 bg-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+              <option value="" disabled>Selecciona participantes</option>
+            </select>
+            <button onclick="addParticipants()" class="bg-green-500 hover:bg-green-600 text-white font-bold p-3 rounded-2xl hover-scale">+</button>
+          </div>
+          <div id="addedParticipants" class="mt-2 text-sm text-gray-300"></div>
+        </div>
+        <div>
+          <label for="date" class="block text-sm font-medium">Fecha</label>
+          <input id="date" type="date" class="w-full p-3 mt-1 bg-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+        </div>
+        <div class="md:col-span-2">
+          <label for="itemsImage" class="block text-sm font-medium">Foto de los ítems</label>
+          <input id="itemsImage" type="file" accept="image/*" class="w-full p-3 mt-1 bg-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+        </div>
+      </div>
+      <button onclick="registerActivity()" class="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-2xl hover-scale">
+        Registrar Actividad
+      </button>
+    </div>
+
+    <!-- Botón de regreso -->
+    <div class="mt-6 text-center">
+      <a href="index.html" class="inline-block bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-2xl hover-scale">Volver al Menú</a>
+    </div>
+  </div>
+
+  <script>
+    let activities = JSON.parse(localStorage.getItem('activities')) || [];
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+    let selectedParticipants = [];
+
+    // Cargar usuarios en el menú desplegable de "Encontrado por"
+    function loadUsers() {
+      const foundBySelect = document.getElementById('foundBy');
+      foundBySelect.innerHTML = '<option value="">Selecciona un usuario</option>';
+      users.forEach(user => {
+        const option = document.createElement('option');
+        option.value = `${user.firstName} ${user.lastName}`;
+        option.textContent = `${user.firstName} ${user.lastName}`;
+        foundBySelect.appendChild(option);
+      });
+      updateParticipants();
+    }
+
+    // Actualizar el menú de "Participantes" excluyendo al usuario seleccionado en "Encontrado por"
+    function updateParticipants() {
+      const foundBy = document.getElementById('foundBy').value;
+      const participantsSelect = document.getElementById('participants');
+      participantsSelect.innerHTML = '<option value="" disabled>Selecciona participantes</option>';
+      users.forEach(user => {
+        const fullName = `${user.firstName} ${user.lastName}`;
+        if (fullName !== foundBy) {
+          const option = document.createElement('option');
+          option.value = fullName;
+          option.textContent = fullName;
+          participantsSelect.appendChild(option);
+        }
+      });
+    }
+
+    // Agregar participantes seleccionados
+    function addParticipants() {
+      const participantsSelect = document.getElementById('participants');
+      const selected = Array.from(participantsSelect.selectedOptions).map(option => option.value);
+      if (selected.length === 0) {
+        alert('Por favor, selecciona al menos un participante.');
+        return;
+      }
+      selected.forEach(participant => {
+        if (!selectedParticipants.includes(participant)) {
+          selectedParticipants.push(participant);
+        }
+      });
+      const addedParticipantsDiv = document.getElementById('addedParticipants');
+      addedParticipantsDiv.textContent = `El usuario fue agregado: ${selectedParticipants.join(', ')}`;
+    }
+
+    function registerActivity() {
+      const activityName = document.getElementById('activityName').value;
+      const foundBy = document.getElementById('foundBy').value;
+      const date = document.getElementById('date').value;
+      const itemsImage = document.getElementById('itemsImage').files[0];
+
+      if (!activityName || !foundBy || !date || selectedParticipants.length === 0) {
+        alert('Por favor, completa todos los campos obligatorios y agrega participantes.');
+        return;
+      }
+
+      // Convertir la imagen a base64 si existe
+      let imageData = null;
+      if (itemsImage) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          imageData = e.target.result;
+          saveActivity(activityName, foundBy, selectedParticipants, date, imageData);
+        };
+        reader.readAsDataURL(itemsImage);
+      } else {
+        saveActivity(activityName, foundBy, selectedParticipants, date, imageData);
+      }
+    }
+
+    function saveActivity(activityName, foundBy, participants, date, imageData) {
+      activities.push({ activityName, foundBy, participants, date, imageData });
+      localStorage.setItem('activities', JSON.stringify(activities));
+      alert('Actividad registrada con éxito.');
+      clearForm();
+    }
+
+    function clearForm() {
+      document.getElementById('activityName').value = '';
+      document.getElementById('foundBy').value = '';
+      document.getElementById('participants').value = '';
+      document.getElementById('date').value = '';
+      document.getElementById('itemsImage').value = '';
+      selectedParticipants = [];
+      document.getElementById('addedParticipants').textContent = '';
+      updateParticipants();
+    }
+
+    // Cargar usuarios al iniciar
+    window.onload = loadUsers;
+  </script>
+</body>
+</html>

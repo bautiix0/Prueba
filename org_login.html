@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Die Deutscshe Hause - Iniciar Sesión (Organización)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Arial:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: url('fondo.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh;
+      color: white;
+      font-family: 'Arial', sans-serif;
+      overflow-x: hidden;
+    }
+    .animate-bounce-in {
+      animation: bounce-in 1s ease;
+    }
+    @keyframes bounce-in {
+      0% { transform: scale(0.7); opacity: 0; }
+      60% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+    .hover-scale {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .hover-scale:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.7);
+    }
+    .glow {
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+    }
+    .navbar {
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+    }
+    .card {
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+  </style>
+</head>
+<body class="p-6">
+  <!-- Navbar (fija, sin animación de entrada) -->
+  <nav class="navbar fixed top-0 left-0 w-full p-4 flex justify-between items-center z-10">
+    <div class="flex items-center">
+      <img src="logo.png" alt="Logo de Die Deutscshe Hause" class="h-12 rounded-full glow" onerror="this.src='https://via.placeholder.com/150?text=Logo'">
+      <h1 class="text-2xl font-bold ml-4">Die Deutscshe Hause</h1>
+    </div>
+    <div>
+      <img src="logo2.png" alt="Logo pequeño" class="h-16 animate-bounce-in" onerror="this.src='https://via.placeholder.com/40?text=Logo2'">
+    </div>
+  </nav>
+
+  <!-- Contenido principal -->
+  <div class="container mx-auto max-w-md mt-24">
+    <h1 class="text-3xl font-bold text-center mb-4 animate-bounce-in">Iniciar Sesión (Organización)</h1>
+
+    <!-- Formulario de login -->
+    <div class="card p-6 rounded-3xl glow animate-bounce-in">
+      <h2 class="text-2xl font-semibold mb-4 text-center text-blue-500">Iniciar Sesión</h2>
+      <div class="space-y-4">
+        <div>
+          <label for="username" class="block text-sm font-medium">Usuario</label>
+          <input id="username" type="text" placeholder="Ej: KonradSchrodinger" class="w-full p-3 mt-1 bg-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+        </div>
+        <div>
+          <label for="password" class="block text-sm font-medium">Contraseña</label>
+          <input id="password" type="password" placeholder="Contraseña" class="w-full p-3 mt-1 bg-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+        </div>
+      </div>
+      <button onclick="orgLogin()" class="mt-6 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-2xl hover-scale transition-all">
+        Ingresar
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Lista de usuarios y contraseñas
+    const orgUsers = [
+      { username: "KonradSchrodinger", password: "x7kP9mL2" },
+      { username: "AntoanCortez", password: "v4qT8nW5" },
+      { username: "KahrolineSchrodinger", password: "r2jH6yB9" },
+      { username: "SkyGosselt", password: "p8mN3kX4" },
+      { username: "MilesAdermann", password: "t5wQ7vZ1" },
+      { username: "LiamSykes", password: "u9rJ2mC6" },
+      { username: "AlexAdermann", password: "k3pT8nY4" },
+      { username: "JaydenLethlier", password: "h7vW5qB2" },
+      { username: "LukaDraxler", password: "n4mK9rX6" },
+      { username: "AbbyGosselt", password: "j2tP7wZ3" },
+      { username: "AkaneFujiwara", password: "q8kN4vY9" },
+      { username: "VintaoClark", password: "m5rT2jB7" },
+      { username: "NicoleSchrodinger", password: "w9pQ6nX3" },
+      { username: "VinzenzDraxler", password: "y4mJ8kT2" },
+      { username: "CarterBanks", password: "b7vN3rW9" },
+      { username: "RafaelMetalurjica", password: "x2kP6tY4" },
+      { username: "RolandDeutsch", password: "n8mQ9jB5" },
+      { username: "ClaudeDenham", password: "t4rJ2wX7" },
+      { username: "DiegoKreshnik", password: "p9kN6vY3" },
+      { username: "CharlieWade", password: "j5mT8rB2" },
+      { username: "KlausAdermann", password: "w7pQ3nX9" },
+      { username: "StanleyWhite", password: "y2kJ6tB4" },
+      { username: "SunSykes", password: "r8mN9vY5" },
+      { username: "AkariSaori", password: "t3kP7jX2" },
+      { username: "AyeThorne", password: "n9rQ4wB6" },
+      { username: "CarlosPagani", password: "m5kT8vY3" },
+      { username: "PatricioCabrera", password: "j2pN6rX7" },
+      { username: "AxelKoch", password: "w8mQ3tB9" },
+      { username: "MozambiqueAlzair", password: "y4kJ9vX2" },
+      { username: "JossSchrodinger", password: "r7pN6tY5" },
+      { username: "RenatoValera", password: "t3mQ8jB4" },
+      { username: "MarcelGulley", password: "n9kP5vX7" },
+      { username: "HansKoch", password: "m2rT8jY3" },
+      { username: "KyrinGreen", password: "p7kN4vB9" },
+      { username: "EddieScott", password: "j5mQ6tX2" },
+      { username: "YuAizawa", password: "w8pN3rY7" },
+      { username: "WayneOrtiz", password: "y2kJ9vB4" },
+      { username: "PacoIluminado", password: "r6mT5jX8" },
+      { username: "BrianValencia", password: "t3kP7vY2" },
+      { username: "KiraZorn", password: "n8mQ4jB6" },
+      { username: "FelixPrangenberg", password: "m5kN9vX3" },
+      { username: "JayMorris", password: "p2rT6jY7" },
+      { username: "NataliaMoreno", password: "j8mQ3vB9" },
+      { username: "NikolasKoch", password: "w4kP9tX2" },
+      { username: "AlinaIvanovna", password: "y7mN6jY5" },
+      { username: "JoaquinGigliotti", password: "r3kT8vB4" },
+      { username: "BernalLopez", password: "t9mQ5jX7" },
+      { username: "PaulWeller", password: "n2kP8vY3" },
+      { username: "ArielGalvez", password: "m7rT4jB9" },
+      { username: "KahilHines", password: "p5kN9vX2" },
+      { username: "KyleWoodz", password: "j8mQ6tY7" },
+      { username: "MarekSchneider", password: "w3kP9vB4" },
+      { username: "RubenTilin", password: "y2mT5jX8" },
+      { username: "JuanCaldas", password: "r7kN3vY5" },
+      { username: "JohnPaniagua", password: "t4mQ8jB2" },
+      { username: "RobertoVino", password: "n9kP6vX7" },
+      { username: "JulianDimarco", password: "m2rT9jY3" },
+      { username: "LucioRojas", password: "p8kN4vB6" }
+    ];
+
+    function orgLogin() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      if (!username || !password) {
+        alert('Por favor, completa todos los campos.');
+        return;
+      }
+
+      // Verificar credenciales
+      const user = orgUsers.find(u => u.username === username && u.password === password);
+
+      if (user) {
+        localStorage.setItem('isOrgLoggedIn', 'true');
+        localStorage.setItem('currentUser', username);
+        alert('Inicio de sesión exitoso.');
+        window.location.href = 'index.html';
+      } else {
+        alert('Credenciales incorrectas. Solo los miembros de la organización pueden acceder.');
+      }
+    }
+  </script>
+</body>
+</html>

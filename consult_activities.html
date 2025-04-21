@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Die Deutscshe Hause - Consultar Actividades</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Arial:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: url('fondo.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh;
+      color: white;
+      font-family: 'Arial', sans-serif;
+      overflow-x: hidden;
+    }
+    .animate-bounce-in {
+      animation: bounce-in 1s ease;
+    }
+    @keyframes bounce-in {
+      0% { transform: scale(0.7); opacity: 0; }
+      60% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+    .hover-scale {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .hover-scale:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.7);
+    }
+    .glow {
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+    }
+    .navbar {
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+    }
+    .card {
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+  </style>
+</head>
+<body class="p-6">
+  <!-- Navbar (fija, sin animación de entrada) -->
+  <nav class="navbar fixed top-0 left-0 w-full p-4 flex justify-between items-center z-10">
+    <div class="flex items-center">
+      <img src="logo.png" alt="Logo de Die Deutscshe Hause" class="h-12 rounded-full glow" onerror="this.src='https://via.placeholder.com/150?text=Logo'">
+      <h1 class="text-2xl font-bold ml-4">Die Deutscshe Hause</h1>
+    </div>
+    <div>
+      <img src="logo2.png" alt="Logo pequeño" class="h-16 animate-bounce-in" onerror="this.src='https://via.placeholder.com/40?text=Logo2'">
+    </div>
+  </nav>
+
+  <!-- Contenido principal -->
+  <div class="container mx-auto max-w-4xl mt-24">
+    <h1 class="text-4xl font-bold text-center mb-8 animate-bounce-in">Consultar Actividades</h1>
+
+    <!-- Selección de usuario -->
+    <div class="card p-6 rounded-3xl glow animate-bounce-in mb-8">
+      <h2 class="text-2xl font-semibold mb-4 text-center text-blue-500">Seleccionar Usuario</h2>
+      <div class="mb-4">
+        <label for="userSelect" class="block text-sm font-medium">Usuario</label>
+        <select id="userSelect" onchange="updateActivities()" class="w-full p-3 mt-1 bg-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+          <option value="">Selecciona un usuario</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Lista de actividades -->
+    <div id="activitiesListContainer" class="card p-6 rounded-3xl glow animate-bounce-in mb-8 hidden">
+      <h2 class="text-2xl font-semibold mb-4 text-center text-blue-500">Actividades en las que Participó</h2>
+      <div id="activitiesList" class="space-y-4"></div>
+    </div>
+
+    <!-- Gráficos -->
+    <div id="chartsContainer" class="card p-6 rounded-3xl glow animate-bounce-in mb-8 hidden">
+      <h2 class="text-2xl font-semibold mb-4 text-center text-blue-500">Estadísticas de Participación</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <h3 class="text-lg font-semibold mb-2 text-center">Criterio de Participación</h3>
+          <canvas id="roleChart"></canvas>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-2 text-center">Actividades Más Frecuentes</h3>
+          <canvas id="activityTypeChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botón de regreso -->
+    <div class="mt-6 text-center">
+      <a href="index.html" class="inline-block bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-2xl hover-scale">Volver al Menú</a>
+    </div>
+  </div>
+
+  <script>
+    let activities = JSON.parse(localStorage.getItem('activities')) || [];
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+    let roleChart, activityTypeChart;
+
+    // Cargar usuarios en el menú desplegable
+    function loadUsers() {
+      const userSelect = document.getElementById('userSelect');
+      userSelect.innerHTML = '<option value="">Selecciona un usuario</option>';
+      users.forEach(user => {
+        const option = document.createElement('option');
+        option.value = `${user.firstName} ${user.lastName}`;
+        option.textContent = `${user.firstName} ${user.lastName}`;
+        userSelect.appendChild(option);
+      });
+    }
+
+    // Actualizar actividades y gráficos
+    function updateActivities() {
+      const selectedUser = document.getElementById('userSelect').value;
+      const activitiesListContainer = document.getElementById('activitiesListContainer');
+      const activitiesList = document.getElementById('activitiesList');
+      const chartsContainer = document.getElementById('chartsContainer');
+
+      if (!selectedUser) {
+        activitiesListContainer.classList.add('hidden');
+        chartsContainer.classList.add('hidden');
+        return;
+      }
+
+      // Filtrar actividades donde el usuario participó
+      const userActivities = activities.filter(activity => 
+        activity.foundBy === selectedUser || activity.participants.includes(selectedUser)
+      );
+
+      // Mostrar lista de actividades
+      activitiesListContainer.classList.remove('hidden');
+      activitiesList.innerHTML = '';
+      if (userActivities.length === 0) {
+        activitiesList.innerHTML = '<p class="text-center text-gray-300">No se encontraron actividades para este usuario.</p>';
+      } else {
+        userActivities.forEach(activity => {
+          const role = activity.foundBy === selectedUser ? 'Organizador' : 'Ayudante';
+          const activityDiv = document.createElement('div');
+          activityDiv.className = 'bg-gray-800 p-4 rounded-2xl';
+          activityDiv.innerHTML = `
+            <p><strong>Actividad:</strong> ${activity.activityName}</p>
+            <p><strong>Rol:</strong> ${role}</p>
+            <p><strong>Fecha:</strong> ${activity.date}</p>
+            ${activity.imageData ? `<img src="${activity.imageData}" alt="Foto de ítems" class="mt-2 w-full h-48 object-cover rounded-2xl">` : '<p>No hay imagen disponible.</p>'}
+          `;
+          activitiesList.appendChild(activityDiv);
+        });
+      }
+
+      // Mostrar gráficos
+      chartsContainer.classList.remove('hidden');
+
+      // Datos para el gráfico de criterio de participación
+      const roleData = {
+        organizador: userActivities.filter(activity => activity.foundBy === selectedUser).length,
+        participante: userActivities.filter(activity => activity.participants.includes(selectedUser)).length
+      };
+
+      // Datos para el gráfico de tipo de actividad
+      const activityTypes = {};
+      userActivities.forEach(activity => {
+        activityTypes[activity.activityName] = (activityTypes[activity.activityName] || 0) + 1;
+      });
+
+      // Destruir gráficos anteriores si existen
+      if (roleChart) roleChart.destroy();
+      if (activityTypeChart) activityTypeChart.destroy();
+
+      // Gráfico de criterio de participación (organizador vs. participante)
+      const roleCtx = document.getElementById('roleChart').getContext('2d');
+      roleChart = new Chart(roleCtx, {
+        type: 'pie',
+        data: {
+          labels: ['Organizador', 'Ayudante'],
+          datasets: [{
+            data: [roleData.organizador, roleData.participante],
+            backgroundColor: ['#3b82f6', '#60a5fa'],
+            borderColor: ['#1e40af', '#1e40af'],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top', labels: { color: 'white' } },
+            title: { display: true, text: 'Criterio de Participación', color: 'white' }
+          }
+        }
+      });
+
+      // Gráfico de tipo de actividad
+      const activityTypeCtx = document.getElementById('activityTypeChart').getContext('2d');
+      activityTypeChart = new Chart(activityTypeCtx, {
+        type: 'bar',
+        data: {
+          labels: Object.keys(activityTypes),
+          datasets: [{
+            label: 'Cantidad',
+            data: Object.values(activityTypes),
+            backgroundColor: '#3b82f6',
+            borderColor: '#1e40af',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            x: { ticks: { color: 'white' } },
+            y: { ticks: { color: 'white' }, beginAtZero: true }
+          },
+          plugins: {
+            legend: { display: false },
+            title: { display: true, text: 'Actividades Más Frecuentes', color: 'white' }
+          }
+        }
+      });
+    }
+
+    // Cargar usuarios al iniciar
+    window.onload = loadUsers;
+  </script>
+</body>
+</html>
