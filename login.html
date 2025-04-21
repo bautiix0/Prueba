@@ -17,24 +17,6 @@
       font-family: 'Arial', sans-serif;
       overflow-x: hidden;
     }
-    .animate-bounce-in {
-      animation: bounce-in 1s ease;
-    }
-    @keyframes bounce-in {
-      0% { transform: scale(0.7); opacity: 0; }
-      60% { transform: scale(1.1); opacity: 1; }
-      100% { transform: scale(1); }
-    }
-    .hover-scale {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .hover-scale:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 20px rgba(59, 130, 246, 0.7);
-    }
-    .glow {
-      box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
-    }
     .navbar {
       background: rgba(0, 0, 0, 0.9);
       backdrop-filter: blur(10px);
@@ -47,65 +29,80 @@
   </style>
 </head>
 <body class="p-6">
-  <!-- Navbar (fija, sin animación de entrada) -->
   <nav class="navbar fixed top-0 left-0 w-full p-4 flex justify-between items-center z-10">
     <div class="flex items-center">
-      <img src="logo.png" alt="Logo de Die Deutscshe Hause" class="h-12 rounded-full glow" onerror="this.src='https://via.placeholder.com/150?text=Logo'">
+      <img src="logo.png" alt="Logo de Die Deutscshe Hause" class="h-12 rounded-full" onerror="this.src='https://via.placeholder.com/150?text=Logo'">
       <h1 class="text-2xl font-bold ml-4">Die Deutscshe Hause</h1>
     </div>
     <div>
-      <img src="logo2.png" alt="Logo pequeño" class="h-16 animate-bounce-in" onerror="this.src='https://via.placeholder.com/40?text=Logo2'">
+      <img src="logo2.png" alt="Logo pequeño" class="h-16" onerror="this.src='https://via.placeholder.com/40?text=Logo2'">
     </div>
   </nav>
-
-  <!-- Contenido principal -->
-  <div class="container mx-auto max-w-md mt-24">
-    <h1 class="text-3xl font-bold text-center mb-4 animate-bounce-in">Debes iniciar sesión para registrar un usuario</h1>
-
-    <!-- Formulario de login -->
-    <div class="card p-6 rounded-3xl glow animate-bounce-in">
-      <h2 class="text-2xl font-semibold mb-4 text-center text-blue-500">Iniciar Sesión</h2>
-      <div class="space-y-4">
+  <div class="container mx-auto max-w-4xl mt-24">
+    <h1 class="text-4xl font-bold text-center mb-8">Iniciar Sesión</h1>
+    <div class="card p-6 rounded-3xl">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label for="username" class="block text-sm font-medium">Usuario</label>
-          <input id="username" type="text" placeholder="Ej: admin" class="w-full p-3 mt-1 bg-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+          <input id="username" type="text" class="w-full p-3 mt-1 bg-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" placeholder="Ingresa el usuario">
         </div>
         <div>
           <label for="password" class="block text-sm font-medium">Contraseña</label>
-          <input id="password" type="password" placeholder="Contraseña" class="w-full p-3 mt-1 bg-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+          <input id="password" type="password" class="w-full p-3 mt-1 bg-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" placeholder="Ingresa la contraseña">
         </div>
       </div>
-      <button onclick="simulateLogin()" class="mt-6 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-2xl hover-scale transition-all">
-        Ingresar
-      </button>
-    </div>
-
-    <!-- Botón de regreso -->
-    <div class="mt-6 text-center">
-      <a href="index.html" class="inline-block bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-2xl hover-scale">Volver al Menú</a>
+      <div class="flex gap-4 mt-4">
+        <button onclick="login()" class="flex-1 bg-blue-400 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-2xl">Iniciar Sesión</button>
+        <button onclick="clearForm()" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-4 rounded-2xl">Limpiar</button>
+      </div>
+      <div id="confirmationMessage" class="mt-4 text-center text-green-400 hidden"></div>
     </div>
   </div>
-
   <script>
-    function simulateLogin() {
+    function login() {
       const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
+      const confirmationMessage = document.getElementById('confirmationMessage');
 
-      if (!username || !password) {
-        alert('Por favor, completa todos los campos.');
-        return;
+      // Simulated org credentials (for main login)
+      if (username === 'org' && password === 'org123') {
+        localStorage.setItem('isLoggedIn', 'true');
+        confirmationMessage.textContent = 'Sesión iniciada con éxito!';
+        confirmationMessage.classList.remove('hidden');
+
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 2000);
       }
-
-      // Simulación de login (en un sistema real, esto sería autenticado por un backend)
-      // Usuario: admin, Contraseña: admin
-      if (username === "admin" && password === "admin") {
-        alert('Inicio de sesión exitoso. Ahora puedes registrar un usuario.');
+      // Simulated admin credentials (for admin-specific access)
+      else if (username === 'admin' && password === 'admin123') {
+        localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('isAdminLoggedIn', 'true');
-        window.location.href = 'register_user.html';
+        confirmationMessage.textContent = 'Sesión de administrador iniciada con éxito!';
+        confirmationMessage.classList.remove('hidden');
+
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 2000);
       } else {
-        alert('Credenciales incorrectas o no tienes permisos de administrador.');
+        confirmationMessage.textContent = 'Credenciales incorrectas. Intenta de nuevo.';
+        confirmationMessage.classList.remove('hidden');
+        confirmationMessage.classList.remove('text-green-400');
+        confirmationMessage.classList.add('text-red-400');
       }
     }
+
+    function clearForm() {
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+      document.getElementById('confirmationMessage').classList.add('hidden');
+    }
+
+    window.onload = function() {
+      console.log('Loaded login.html');
+      console.log('isLoggedIn:', localStorage.getItem('isLoggedIn'));
+      console.log('isAdminLoggedIn:', localStorage.getItem('isAdminLoggedIn'));
+    };
   </script>
 </body>
 </html>
