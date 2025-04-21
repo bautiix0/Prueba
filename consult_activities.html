@@ -45,10 +45,14 @@
       backdrop-filter: blur(10px);
       border: 1px solid rgba(59, 130, 246, 0.3);
     }
+    .activity-image {
+      max-width: 100px;
+      height: auto;
+      border-radius: 1rem;
+    }
   </style>
 </head>
 <body class="p-6">
-  <!-- Navbar (fija, sin animación de entrada) -->
   <nav class="navbar fixed top-0 left-0 w-full p-4 flex justify-between items-center z-10">
     <div class="flex items-center">
       <img src="logo.png" alt="Logo de Die Deutscshe Hause" class="h-12 rounded-full glow" onerror="this.src='https://via.placeholder.com/150?text=Logo'">
@@ -58,174 +62,280 @@
       <img src="logo2.png" alt="Logo pequeño" class="h-16 animate-bounce-in" onerror="this.src='https://via.placeholder.com/40?text=Logo2'">
     </div>
   </nav>
-
-  <!-- Contenido principal -->
   <div class="container mx-auto max-w-4xl mt-24">
     <h1 class="text-4xl font-bold text-center mb-8 animate-bounce-in">Consultar Actividades</h1>
-
-    <!-- Selección de usuario -->
     <div class="card p-6 rounded-3xl glow animate-bounce-in mb-8">
       <h2 class="text-2xl font-semibold mb-4 text-center text-blue-500">Seleccionar Usuario</h2>
       <div class="mb-4">
         <label for="userSelect" class="block text-sm font-medium">Usuario</label>
-        <select id="userSelect" onchange="updateActivities()" class="w-full p-3 mt-1 bg-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+        <select id="userSelect" onchange="updateActivityList()" class="w-full p-3 mt-1 bg-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
           <option value="">Selecciona un usuario</option>
         </select>
       </div>
     </div>
-
-    <!-- Lista de actividades -->
-    <div id="activitiesListContainer" class="card p-6 rounded-3xl glow animate-bounce-in mb-8 hidden">
-      <h2 class="text-2xl font-semibold mb-4 text-center text-blue-500">Actividades en las que Participó</h2>
-      <div id="activitiesList" class="space-y-4"></div>
+    <div id="activitiesList" class="card p-6 rounded-3xl glow animate-bounce-in mb-8 hidden">
+      <h2 class="text-2xl font-semibold mb-4 text-center text-blue-500">Actividades del Usuario</h2>
+      <div class="overflow-x-auto">
+        <table id="activitiesTable" class="w-full text-left">
+          <thead>
+            <tr class="bg-gray-700">
+              <th class="p-2">📋 Actividad</th>
+              <th class="p-2">👤 Encontrado por</th>
+              <th class="p-2">👥 Participantes</th>
+              <th class="p-2">📅 Fecha</th>
+              <th class="p-2">📷 Foto</th>
+              <th class="p-2">✏️ Editar</th>
+            </tr>
+          </thead>
+          <tbody id="activitiesTableBody"></tbody>
+        </table>
+      </div>
     </div>
-
-    <!-- Gráficos -->
-    <div id="chartsContainer" class="card p-6 rounded-3xl glow animate-bounce-in mb-8 hidden">
-      <h2 class="text-2xl font-semibold mb-4 text-center text-blue-500">Estadísticas de Participación</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div id="editForm" class="card p-6 rounded-3xl glow animate-bounce-in mb-8 hidden">
+      <h2 class="text-2xl font-semibold mb-4 text-center text-blue-500">Editar Actividad</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <h3 class="text-lg font-semibold mb-2 text-center">Criterio de Participación</h3>
-          <canvas id="roleChart"></canvas>
+          <label for="editActivityName" class="block text-sm font-medium">📋 Nombre de la Actividad</label>
+          <select id="editActivityName" class="w-full p-3 mt-1 bg-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+            <option value="">Selecciona una actividad</option>
+            <option value="Misión de tráfico ilegal">Misión de tráfico ilegal</option>
+            <option value="Robo a negocio">Robo a negocio</option>
+            <option value="Lancha encallada">Lancha encallada</option>
+            <option value="Elaboración de metanfetamina">Elaboración de metanfetamina</option>
+            <option value="Búsqueda de contenedores">Búsqueda de contenedores</option>
+            <option value="Barriles a la deriva">Barriles a la deriva</option>
+            <option value="Tráfico aéreo avanzado">Tráfico aéreo avanzado</option>
+            <option value="Misión de tráfico avanzado">Misión de tráfico avanzado</option>
+          </select>
         </div>
         <div>
-          <h3 class="text-lg font-semibold mb-2 text-center">Actividades Más Frecuentes</h3>
-          <canvas id="activityTypeChart"></canvas>
+          <label for="editFoundBy" class="block text-sm font-medium">👤 Encontrado por</label>
+          <select id="editFoundBy" class="w-full p-3 mt-1 bg-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" onchange="updateEditParticipants()">
+            <option value="">Selecciona un usuario</option>
+          </select>
+        </div>
+        <div>
+          <label for="editParticipants" class="block text-sm font-medium">👥 Participantes</label>
+          <div class="select-container">
+            <select id="editParticipants" multiple class="p-3 mt-1 bg-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+              <option value="" disabled>Selecciona participantes</option>
+            </select>
+            <button onclick="addEditParticipants()" class="bg-green-500 hover:bg-green-600 text-white font-bold p-3 rounded-2xl hover-scale">+</button>
+          </div>
+          <div id="editAddedParticipants" class="mt-2 text-sm text-gray-300"></div>
+        </div>
+        <div>
+          <label for="editDate" class="block text-sm font-medium">📅 Fecha</label>
+          <input id="editDate" type="date" class="w-full p-3 mt-1 bg-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+        </div>
+        <div class="md:col-span-2">
+          <label for="editItemsImage" class="block text-sm font-medium">📷 Foto de los ítems</label>
+          <input id="editItemsImage" type="file" accept="image/*" class="w-full p-3 mt-1 bg-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+        </div>
+      </div>
+      <div class="flex gap-4 mt-4">
+        <button onclick="saveEditedActivity()" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-2xl hover-scale">Guardar Cambios</button>
+        <button onclick="cancelEdit()" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-4 rounded-2xl hover-scale">Cancelar</button>
+      </div>
+    </div>
+    <div class="card p-6 rounded-3xl glow animate-bounce-in">
+      <h2 class="text-2xl font-semibold mb-4 text-center text-blue-500">Estadísticas</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <h3 class="text-lg font-semibold mb-2">📊 Participación</h3>
+          <canvas id="participationChart" class="w-full"></canvas>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-2">📈 Actividades Más Frecuentes</h3>
+          <canvas id="activityFrequencyChart" class="w-full"></canvas>
         </div>
       </div>
     </div>
-
-    <!-- Botón de regreso -->
     <div class="mt-6 text-center">
       <a href="index.html" class="inline-block bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-2xl hover-scale">Volver al Menú</a>
     </div>
   </div>
-
   <script>
     let activities = JSON.parse(localStorage.getItem('activities')) || [];
     let users = JSON.parse(localStorage.getItem('users')) || [];
-    let roleChart, activityTypeChart;
-
-    // Cargar usuarios en el menú desplegable
+    let selectedParticipants = [];
+    let editingIndex = -1;
+    let participationChart, activityFrequencyChart;
     function loadUsers() {
       const userSelect = document.getElementById('userSelect');
+      const editFoundBySelect = document.getElementById('editFoundBy');
       userSelect.innerHTML = '<option value="">Selecciona un usuario</option>';
+      editFoundBySelect.innerHTML = '<option value="">Selecciona un usuario</option>';
       users.forEach(user => {
+        const fullName = `${user.firstName} ${user.lastName}`;
         const option = document.createElement('option');
-        option.value = `${user.firstName} ${user.lastName}`;
-        option.textContent = `${user.firstName} ${user.lastName}`;
+        option.value = fullName;
+        option.textContent = fullName;
         userSelect.appendChild(option);
+        editFoundBySelect.appendChild(option.cloneNode(true));
       });
     }
-
-    // Actualizar actividades y gráficos
-    function updateActivities() {
-      const selectedUser = document.getElementById('userSelect').value;
-      const activitiesListContainer = document.getElementById('activitiesListContainer');
+    function updateActivityList() {
+      const user = document.getElementById('userSelect').value;
       const activitiesList = document.getElementById('activitiesList');
-      const chartsContainer = document.getElementById('chartsContainer');
-
-      if (!selectedUser) {
-        activitiesListContainer.classList.add('hidden');
-        chartsContainer.classList.add('hidden');
+      const tableBody = document.getElementById('activitiesTableBody');
+      tableBody.innerHTML = '';
+      activitiesList.classList.add('hidden');
+      if (!user) {
+        updateCharts([], []);
         return;
       }
-
-      // Filtrar actividades donde el usuario participó
-      const userActivities = activities.filter(activity => 
-        activity.foundBy === selectedUser || activity.participants.includes(selectedUser)
+      const userActivities = activities.filter((activity, index) =>
+        activity.foundBy === user || activity.participants.includes(user)
       );
-
-      // Mostrar lista de actividades
-      activitiesListContainer.classList.remove('hidden');
-      activitiesList.innerHTML = '';
-      if (userActivities.length === 0) {
-        activitiesList.innerHTML = '<p class="text-center text-gray-300">No se encontraron actividades para este usuario.</p>';
-      } else {
-        userActivities.forEach(activity => {
-          const role = activity.foundBy === selectedUser ? 'Organizador' : 'Ayudante';
-          const activityDiv = document.createElement('div');
-          activityDiv.className = 'bg-gray-800 p-4 rounded-2xl';
-          activityDiv.innerHTML = `
-            <p><strong>Actividad:</strong> ${activity.activityName}</p>
-            <p><strong>Rol:</strong> ${role}</p>
-            <p><strong>Fecha:</strong> ${activity.date}</p>
-            ${activity.imageData ? `<img src="${activity.imageData}" alt="Foto de ítems" class="mt-2 w-full h-48 object-cover rounded-2xl">` : '<p>No hay imagen disponible.</p>'}
-          `;
-          activitiesList.appendChild(activityDiv);
-        });
+      if (userActivities.length > 0) {
+        activitiesList.classList.remove('hidden');
       }
-
-      // Mostrar gráficos
-      chartsContainer.classList.remove('hidden');
-
-      // Datos para el gráfico de criterio de participación
-      const roleData = {
-        organizador: userActivities.filter(activity => activity.foundBy === selectedUser).length,
-        participante: userActivities.filter(activity => activity.participants.includes(selectedUser)).length
-      };
-
-      // Datos para el gráfico de tipo de actividad
-      const activityTypes = {};
-      userActivities.forEach(activity => {
-        activityTypes[activity.activityName] = (activityTypes[activity.activityName] || 0) + 1;
+      userActivities.forEach((activity, index) => {
+        const role = activity.foundBy === user ? 'Encontrado por' : 'Participante';
+        const imageSrc = activity.imageData || 'https://via.placeholder.com/100?text=Sin+Foto';
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="p-2 border-t border-gray-600">${activity.activityName}</td>
+          <td class="p-2 border-t border-gray-600">${activity.foundBy}</td>
+          <td class="p-2 border-t border-gray-600">${activity.participants.join(', ')}</td>
+          <td class="p-2 border-t border-gray-600">${activity.date}</td>
+          <td class="p-2 border-t border-gray-600"><img src="${imageSrc}" alt="Foto de ítems" class="activity-image"></td>
+          <td class="p-2 border-t border-gray-600">
+            <button onclick="editActivity(${index})" class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-1 px-2 rounded-2xl hover-scale">✏️</button>
+          </td>
+        `;
+        tableBody.appendChild(row);
       });
-
-      // Destruir gráficos anteriores si existen
-      if (roleChart) roleChart.destroy();
-      if (activityTypeChart) activityTypeChart.destroy();
-
-      // Gráfico de criterio de participación (organizador vs. participante)
-      const roleCtx = document.getElementById('roleChart').getContext('2d');
-      roleChart = new Chart(roleCtx, {
-        type: 'pie',
-        data: {
-          labels: ['Organizador', 'Ayudante'],
-          datasets: [{
-            data: [roleData.organizador, roleData.participante],
-            backgroundColor: ['#3b82f6', '#60a5fa'],
-            borderColor: ['#1e40af', '#1e40af'],
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { position: 'top', labels: { color: 'white' } },
-            title: { display: true, text: 'Criterio de Participación', color: 'white' }
-          }
-        }
+      updateCharts(userActivities, user);
+    }
+    function updateCharts(userActivities, user) {
+      const foundByCount = userActivities.filter(a => a.foundBy === user).length;
+      const participantCount = userActivities.filter(a => a.participants.includes(user)).length;
+      const activityCounts = {};
+      userActivities.forEach(a => {
+        activityCounts[a.activityName] = (activityCounts[a.activityName] || 0) + 1;
       });
-
-      // Gráfico de tipo de actividad
-      const activityTypeCtx = document.getElementById('activityTypeChart').getContext('2d');
-      activityTypeChart = new Chart(activityTypeCtx, {
+      const ctx1 = document.getElementById('participationChart').getContext('2d');
+      if (participationChart) participationChart.destroy();
+      participationChart = new Chart(ctx1, {
         type: 'bar',
         data: {
-          labels: Object.keys(activityTypes),
+          labels: ['Encontrado por', 'Participante'],
           datasets: [{
-            label: 'Cantidad',
-            data: Object.values(activityTypes),
-            backgroundColor: '#3b82f6',
-            borderColor: '#1e40af',
+            label: 'Participaciones',
+            data: [foundByCount, participantCount],
+            backgroundColor: ['#3b82f6', '#60a5fa'],
             borderWidth: 1
           }]
         },
         options: {
-          responsive: true,
           scales: {
-            x: { ticks: { color: 'white' } },
-            y: { ticks: { color: 'white' }, beginAtZero: true }
+            y: { beginAtZero: true, ticks: { color: 'white' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
+            x: { ticks: { color: 'white' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } }
           },
-          plugins: {
-            legend: { display: false },
-            title: { display: true, text: 'Actividades Más Frecuentes', color: 'white' }
-          }
+          plugins: { legend: { labels: { color: 'white' } } }
+        }
+      });
+      const ctx2 = document.getElementById('activityFrequencyChart').getContext('2d');
+      if (activityFrequencyChart) activityFrequencyChart.destroy();
+      activityFrequencyChart = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels: Object.keys(activityCounts),
+          datasets: [{
+            label: 'Frecuencia',
+            data: Object.values(activityCounts),
+            backgroundColor: '#3b82f6',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: { beginAtZero: true, ticks: { color: 'white' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
+            x: { ticks: { color: 'white' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } }
+          },
+          plugins: { legend: { labels: { color: 'white' } } }
         }
       });
     }
-
-    // Cargar usuarios al iniciar
+    function editActivity(index) {
+      editingIndex = index;
+      const activity = activities[index];
+      document.getElementById('editActivityName').value = activity.activityName;
+      document.getElementById('editFoundBy').value = activity.foundBy;
+      document.getElementById('editDate').value = activity.date;
+      selectedParticipants = [...activity.participants];
+      document.getElementById('editAddedParticipants').textContent = `Participantes agregados: ${selectedParticipants.join(', ')}`;
+      document.getElementById('editForm').classList.remove('hidden');
+      document.getElementById('activitiesList').classList.add('hidden');
+      updateEditParticipants();
+    }
+    function updateEditParticipants() {
+      const foundBy = document.getElementById('editFoundBy').value;
+      const participantsSelect = document.getElementById('editParticipants');
+      participantsSelect.innerHTML = '<option value="" disabled>Selecciona participantes</option>';
+      users.forEach(user => {
+        const fullName = `${user.firstName} ${user.lastName}`;
+        if (fullName !== foundBy) {
+          const option = document.createElement('option');
+          option.value = fullName;
+          option.textContent = fullName;
+          participantsSelect.appendChild(option);
+        }
+      });
+    }
+    function addEditParticipants() {
+      const participantsSelect = document.getElementById('editParticipants');
+      const selected = Array.from(participantsSelect.selectedOptions).map(option => option.value);
+      if (selected.length === 0) {
+        alert('Por favor, selecciona al menos un participante.');
+        return;
+      }
+      selected.forEach(participant => {
+        if (!selectedParticipants.includes(participant)) {
+          selectedParticipants.push(participant);
+        }
+      });
+      const addedParticipantsDiv = document.getElementById('editAddedParticipants');
+      addedParticipantsDiv.textContent = `Participantes agregados: ${selectedParticipants.join(', ')}`;
+    }
+    function saveEditedActivity() {
+      const activityName = document.getElementById('editActivityName').value;
+      const foundBy = document.getElementById('editFoundBy').value;
+      const date = document.getElementById('editDate').value;
+      const itemsImage = document.getElementById('editItemsImage').files[0];
+      if (!activityName || !foundBy || !date || selectedParticipants.length === 0) {
+        alert('Por favor, completa todos los campos obligatorios y agrega participantes.');
+        return;
+      }
+      const saveActivity = (imageData) => {
+        activities[editingIndex] = { activityName, foundBy, participants: selectedParticipants, date, imageData };
+        localStorage.setItem('activities', JSON.stringify(activities));
+        alert('Actividad editada con éxito.');
+        cancelEdit();
+        updateActivityList();
+      };
+      if (itemsImage) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          saveActivity(e.target.result);
+        };
+        reader.readAsDataURL(itemsImage);
+      } else {
+        saveActivity(activities[editingIndex].imageData);
+      }
+    }
+    function cancelEdit() {
+      document.getElementById('editForm').classList.add('hidden');
+      document.getElementById('activitiesList').classList.remove('hidden');
+      document.getElementById('editActivityName').value = '';
+      document.getElementById('editFoundBy').value = '';
+      document.getElementById('editDate').value = '';
+      document.getElementById('editItemsImage').value = '';
+      selectedParticipants = [];
+      document.getElementById('editAddedParticipants').textContent = '';
+    }
     window.onload = loadUsers;
   </script>
 </body>
